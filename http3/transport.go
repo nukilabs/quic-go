@@ -193,6 +193,9 @@ func (t *Transport) roundTripOpt(req *http.Request, opt RoundTripOpt) (*http.Res
 	}
 	for k, vv := range req.Header {
 		if !httpguts.ValidHeaderFieldName(k) {
+			if k == http.HeaderOrderKey {
+				continue
+			}
 			return nil, fmt.Errorf("http3: invalid http header field name %q", k)
 		}
 		for _, v := range vv {
