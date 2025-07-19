@@ -1,12 +1,13 @@
 package qtls
 
 import (
-	"crypto/tls"
 	"fmt"
 	"net"
 	"testing"
 
-	"github.com/quic-go/quic-go/internal/testdata"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/quic-go/internal/testdata"
 
 	"github.com/stretchr/testify/require"
 )

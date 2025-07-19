@@ -4,8 +4,9 @@ import (
 	"crypto"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/tls"
 	"fmt"
+
+	tls "github.com/nukilabs/utls"
 
 	"golang.org/x/crypto/chacha20poly1305"
 )

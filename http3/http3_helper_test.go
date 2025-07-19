@@ -6,21 +6,23 @@ import (
 	"crypto"
 	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"errors"
 	"io"
 	"math/big"
 	"net"
-	"net/http"
 	"os"
 	"strconv"
 	"testing"
 	"time"
 
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+
+	"github.com/nukilabs/quic-go"
 	"github.com/quic-go/qpack"
-	"github.com/quic-go/quic-go"
 
 	"github.com/stretchr/testify/require"
 )

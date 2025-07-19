@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/quic-go/quic-go/internal/congestion"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qerr"
-	"github.com/quic-go/quic-go/internal/utils"
-	"github.com/quic-go/quic-go/internal/wire"
-	"github.com/quic-go/quic-go/logging"
+	"github.com/nukilabs/quic-go/internal/congestion"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/qerr"
+	"github.com/nukilabs/quic-go/internal/utils"
+	"github.com/nukilabs/quic-go/internal/wire"
+	"github.com/nukilabs/quic-go/logging"
 )
 
 const (

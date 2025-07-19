@@ -2,16 +2,18 @@ package self_test
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"net"
-	"net/http"
-	"net/http/httptrace"
 	"net/textproto"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go/http3"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
+
+	"github.com/nukilabs/quic-go/http3"
 	"github.com/stretchr/testify/require"
 )
 

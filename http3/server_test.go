@@ -3,20 +3,22 @@ package http3
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"fmt"
 	"io"
 	"log/slog"
 	"net"
-	"net/http"
-	"net/http/httptest"
 	"runtime"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3/internal/testdata"
-	"github.com/quic-go/quic-go/quicvarint"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptest"
+
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3/internal/testdata"
+	"github.com/nukilabs/quic-go/quicvarint"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

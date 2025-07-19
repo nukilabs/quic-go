@@ -1,9 +1,10 @@
 package testdata
 
 import (
-	"crypto/tls"
 	"io"
 	"testing"
+
+	tls "github.com/nukilabs/utls"
 
 	"github.com/stretchr/testify/require"
 )

@@ -5,14 +5,11 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
 	mrand "math/rand/v2"
 	"net"
-	"net/http"
-	"net/http/httptrace"
 	"net/textproto"
 	"os"
 	"strconv"
@@ -21,11 +18,16 @@ import (
 	"testing"
 	"time"
 
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
+
 	"golang.org/x/sync/errgroup"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	quicproxy "github.com/quic-go/quic-go/integrationtests/tools/proxy"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	quicproxy "github.com/nukilabs/quic-go/integrationtests/tools/proxy"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

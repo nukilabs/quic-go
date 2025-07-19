@@ -5,11 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/http"
-	"net/http/httptrace"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
+
+	"github.com/nukilabs/quic-go"
 
 	"github.com/quic-go/qpack"
 )

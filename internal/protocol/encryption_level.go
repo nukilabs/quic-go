@@ -1,8 +1,9 @@
 package protocol
 
 import (
-	"crypto/tls"
 	"fmt"
+
+	tls "github.com/nukilabs/utls"
 )
 
 // EncryptionLevel is the encryption level

@@ -2,13 +2,11 @@ package http3
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
 	"log/slog"
 	"net"
-	"net/http"
 	"runtime"
 	"slices"
 	"strconv"
@@ -17,8 +15,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/quicvarint"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/quicvarint"
 
 	"github.com/quic-go/qpack"
 )

@@ -4,12 +4,13 @@ import (
 	"crypto"
 	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"math/big"
 	"net"
 	"time"
+
+	tls "github.com/nukilabs/utls"
 )
 
 const ALPN = "quic-go integration tests"

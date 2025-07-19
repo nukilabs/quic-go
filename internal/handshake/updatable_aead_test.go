@@ -2,16 +2,17 @@ package handshake
 
 import (
 	"crypto/rand"
-	"crypto/tls"
 	"fmt"
 	mrand "math/rand/v2"
 	"testing"
 	"time"
 
-	mocklogging "github.com/quic-go/quic-go/internal/mocks/logging"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qerr"
-	"github.com/quic-go/quic-go/internal/utils"
+	tls "github.com/nukilabs/utls"
+
+	mocklogging "github.com/nukilabs/quic-go/internal/mocks/logging"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/qerr"
+	"github.com/nukilabs/quic-go/internal/utils"
 	"go.uber.org/mock/gomock"
 
 	"github.com/stretchr/testify/require"

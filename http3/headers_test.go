@@ -2,8 +2,9 @@ package http3
 
 import (
 	"fmt"
-	"net/http"
 	"testing"
+
+	"github.com/nukilabs/http"
 
 	"github.com/quic-go/qpack"
 	"github.com/stretchr/testify/require"
@@ -13,7 +14,7 @@ func TestRequestHeaderParsing(t *testing.T) {
 	t.Run("regular path", func(t *testing.T) {
 		testRequestHeaderParsing(t, "/foo")
 	})
-	// see https://github.com/quic-go/quic-go/pull/1898
+	// see https://github.com/nukilabs/quic-go/pull/1898
 	t.Run("path starting with //", func(t *testing.T) {
 		testRequestHeaderParsing(t, "//foo")
 	})

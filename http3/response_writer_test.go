@@ -3,8 +3,9 @@ package http3
 import (
 	"bytes"
 	"io"
-	"net/http"
 	"testing"
+
+	"github.com/nukilabs/http"
 
 	"github.com/quic-go/qpack"
 

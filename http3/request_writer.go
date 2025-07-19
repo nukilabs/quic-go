@@ -6,14 +6,15 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"net/http"
-	"net/http/httptrace"
 	"strconv"
 	"strings"
 	"sync"
 
-	"golang.org/x/net/http/httpguts"
-	"golang.org/x/net/http2/hpack"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
+
+	"github.com/nukilabs/http/http2/hpack"
+	"github.com/nukilabs/http/httpguts"
 	"golang.org/x/net/idna"
 
 	"github.com/quic-go/qpack"

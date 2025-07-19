@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	quicproxy "github.com/quic-go/quic-go/integrationtests/tools/proxy"
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go"
+	quicproxy "github.com/nukilabs/quic-go/integrationtests/tools/proxy"
+	"github.com/nukilabs/quic-go/internal/protocol"
 	"github.com/stretchr/testify/require"
 )
 

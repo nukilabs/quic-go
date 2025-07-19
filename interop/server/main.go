@@ -1,18 +1,20 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"os"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/internal/qtls"
-	"github.com/quic-go/quic-go/interop/http09"
-	"github.com/quic-go/quic-go/interop/utils"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/internal/qtls"
+	"github.com/nukilabs/quic-go/interop/http09"
+	"github.com/nukilabs/quic-go/interop/utils"
 )
 
 func main() {

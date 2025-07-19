@@ -1,8 +1,9 @@
 package qerr
 
 import (
-	"crypto/tls"
 	"fmt"
+
+	tls "github.com/nukilabs/utls"
 )
 
 // TransportErrorCode is a QUIC transport error.
