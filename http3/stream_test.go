@@ -5,14 +5,15 @@ import (
 	"context"
 	"io"
 	"math"
-	"net/http"
-	"net/http/httptest"
-	"net/http/httptrace"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptest"
+	"github.com/nukilabs/http/httptrace"
+
+	"github.com/nukilabs/quic-go"
 
 	"github.com/quic-go/qpack"
 

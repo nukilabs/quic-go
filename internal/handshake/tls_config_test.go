@@ -1,10 +1,11 @@
 package handshake
 
 import (
-	"crypto/tls"
 	"net"
 	"reflect"
 	"testing"
+
+	tls "github.com/nukilabs/utls"
 
 	"github.com/stretchr/testify/require"
 )

@@ -2,14 +2,15 @@ package self_test
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"net"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/logging"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/logging"
 
 	"github.com/stretchr/testify/require"
 )

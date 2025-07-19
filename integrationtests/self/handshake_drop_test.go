@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
-	"crypto/tls"
 	"fmt"
 	"io"
 	mrand "math/rand/v2"
@@ -14,9 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	quicproxy "github.com/quic-go/quic-go/integrationtests/tools/proxy"
-	"github.com/quic-go/quic-go/internal/wire"
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/quic-go"
+	quicproxy "github.com/nukilabs/quic-go/integrationtests/tools/proxy"
+	"github.com/nukilabs/quic-go/internal/wire"
 
 	"github.com/stretchr/testify/require"
 )

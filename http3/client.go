@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
-	"net/http"
-	"net/http/httptrace"
 	"net/textproto"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/quicvarint"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
+
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/quicvarint"
 
 	"github.com/quic-go/qpack"
 )

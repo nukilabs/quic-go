@@ -4,9 +4,10 @@ import (
 	"crypto"
 	"crypto/cipher"
 	"crypto/rand"
-	"crypto/tls"
 	"testing"
 	"unsafe"
+
+	tls "github.com/nukilabs/utls"
 
 	"github.com/stretchr/testify/require"
 )

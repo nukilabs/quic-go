@@ -2,22 +2,24 @@ package http3
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
 	"log/slog"
 	"net"
-	"net/http"
-	"net/http/httptrace"
 	"net/url"
 	"strings"
 	"sync"
 	"sync/atomic"
 
-	"golang.org/x/net/http/httpguts"
+	tls "github.com/nukilabs/utls"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
+
+	"github.com/nukilabs/http/httpguts"
+
+	"github.com/nukilabs/quic-go"
 )
 
 // Settings are HTTP/3 settings that apply to the underlying connection.

@@ -8,17 +8,18 @@ import (
 	"io"
 	"log"
 	"mime/multipart"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
 
-	_ "net/http/pprof"
+	"github.com/nukilabs/http"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/internal/testdata"
-	"github.com/quic-go/quic-go/qlog"
+	_ "github.com/nukilabs/http/pprof"
+
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/internal/testdata"
+	"github.com/nukilabs/quic-go/qlog"
 )
 
 type binds []string

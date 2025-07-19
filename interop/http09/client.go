@@ -2,18 +2,20 @@ package http09
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"io"
 	"log"
 	"net"
-	"net/http"
 	"strings"
 	"sync"
 
+	tls "github.com/nukilabs/utls"
+
+	"github.com/nukilabs/http"
+
 	"golang.org/x/net/idna"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/quic-go"
 )
 
 // MethodGet0RTT allows a GET request to be sent using 0-RTT.

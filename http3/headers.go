@@ -3,13 +3,14 @@ package http3
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"net/textproto"
 	"net/url"
 	"strconv"
 	"strings"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/nukilabs/http"
+
+	"github.com/nukilabs/http/httpguts"
 
 	"github.com/quic-go/qpack"
 )
