@@ -141,7 +141,7 @@ func TestStreamWrite(t *testing.T) {
 func TestRequestStream(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	qstr := NewMockDatagramStream(mockCtrl)
-	requestWriter := newRequestWriter()
+	requestWriter := newRequestWriter(nil)
 	clientConn, _ := newConnPair(t)
 	str := newRequestStream(
 		newStream(

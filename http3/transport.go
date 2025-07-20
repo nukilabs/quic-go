@@ -90,6 +90,10 @@ type Transport struct {
 	// AdditionalSettingsOrder specifies the order in which the additional settings should be sent.
 	AdditionalSettingsOrder []uint64
 
+	// PseudoHeaderOrder specifies the order in which pseudo-header fields
+	// should be included in requests.
+	PseudoHeaderOrder []string
+
 	// MaxResponseHeaderBytes specifies a limit on how many response bytes are
 	// allowed in the server's response header.
 	// Zero means to use a default limit.
@@ -134,6 +138,7 @@ func (t *Transport) init() error {
 				t.EnableDatagrams,
 				t.AdditionalSettings,
 				t.AdditionalSettingsOrder,
+				t.PseudoHeaderOrder,
 				t.StreamHijacker,
 				t.UniStreamHijacker,
 				t.MaxResponseHeaderBytes,
@@ -432,6 +437,7 @@ func (t *Transport) NewClientConn(conn *quic.Conn) *ClientConn {
 		t.EnableDatagrams,
 		t.AdditionalSettings,
 		t.AdditionalSettingsOrder,
+		t.PseudoHeaderOrder,
 		t.StreamHijacker,
 		t.UniStreamHijacker,
 		t.MaxResponseHeaderBytes,
