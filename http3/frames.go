@@ -118,8 +118,8 @@ const (
 )
 
 type Setting struct {
-	ID    uint64
-	Value uint64
+	ID  uint64
+	Val uint64
 }
 
 type settingsFrame struct {
