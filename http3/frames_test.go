@@ -171,12 +171,12 @@ func TestParserSettingsFrameDuplicateSettings(t *testing.T) {
 		},
 		{
 			name: "extended connect",
-			num:  settingExtendedConnect,
+			num:  SettingExtendedConnect,
 			val:  1,
 		},
 		{
 			name: "datagram",
-			num:  settingDatagram,
+			num:  SettingH3Datagram,
 			val:  1,
 		},
 	} {
@@ -207,9 +207,9 @@ func testParserSettingsFrameDatagram(t *testing.T, enabled bool) {
 	var settings []byte
 	switch enabled {
 	case true:
-		settings = appendSetting(nil, settingDatagram, 1)
+		settings = appendSetting(nil, SettingH3Datagram, 1)
 	case false:
-		settings = appendSetting(nil, settingDatagram, 0)
+		settings = appendSetting(nil, SettingH3Datagram, 0)
 	}
 	data := quicvarint.Append(nil, 4) // type byte
 	data = quicvarint.Append(data, uint64(len(settings)))
@@ -229,7 +229,7 @@ func testParserSettingsFrameDatagram(t *testing.T, enabled bool) {
 }
 
 func TestParserSettingsFrameDatagramInvalidValue(t *testing.T) {
-	settings := quicvarint.Append(nil, settingDatagram)
+	settings := quicvarint.Append(nil, SettingH3Datagram)
 	settings = quicvarint.Append(settings, 1337)
 	data := quicvarint.Append(nil, 4) // type byte
 	data = quicvarint.Append(data, uint64(len(settings)))
@@ -252,9 +252,9 @@ func testParserSettingsFrameExtendedConnect(t *testing.T, enabled bool) {
 	var settings []byte
 	switch enabled {
 	case true:
-		settings = appendSetting(nil, settingExtendedConnect, 1)
+		settings = appendSetting(nil, SettingExtendedConnect, 1)
 	case false:
-		settings = appendSetting(nil, settingExtendedConnect, 0)
+		settings = appendSetting(nil, SettingExtendedConnect, 0)
 	}
 	data := quicvarint.Append(nil, 4) // type byte
 	data = quicvarint.Append(data, uint64(len(settings)))
@@ -274,7 +274,7 @@ func testParserSettingsFrameExtendedConnect(t *testing.T, enabled bool) {
 }
 
 func TestParserSettingsFrameExtendedConnectInvalidValue(t *testing.T) {
-	settings := quicvarint.Append(nil, settingExtendedConnect)
+	settings := quicvarint.Append(nil, SettingExtendedConnect)
 	settings = quicvarint.Append(settings, 1337)
 	data := quicvarint.Append(nil, 4) // type byte
 	data = quicvarint.Append(data, uint64(len(settings)))

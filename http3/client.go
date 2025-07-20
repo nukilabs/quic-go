@@ -56,6 +56,8 @@ type ClientConn struct {
 	// It is invalid to specify any settings defined by RFC 9114 (HTTP/3) and RFC 9297 (HTTP Datagrams).
 	additionalSettings map[uint64]uint64
 
+	additionalSettingsOrder []uint64 // the order in which the additional settings should be sent
+
 	// maxResponseHeaderBytes specifies a limit on how many response bytes are
 	// allowed in the server's response header.
 	maxResponseHeaderBytes uint64
@@ -79,6 +81,7 @@ func newClientConn(
 	conn *quic.Conn,
 	enableDatagrams bool,
 	additionalSettings map[uint64]uint64,
+	additionalSettingsOrder []uint64,
 	streamHijacker func(FrameType, quic.ConnectionTracingID, *quic.Stream, error) (hijacked bool, err error),
 	uniStreamHijacker func(StreamType, quic.ConnectionTracingID, *quic.ReceiveStream, error) (hijacked bool),
 	maxResponseHeaderBytes int64,
@@ -86,10 +89,11 @@ func newClientConn(
 	logger *slog.Logger,
 ) *ClientConn {
 	c := &ClientConn{
-		enableDatagrams:    enableDatagrams,
-		additionalSettings: additionalSettings,
-		disableCompression: disableCompression,
-		logger:             logger,
+		enableDatagrams:         enableDatagrams,
+		additionalSettings:      additionalSettings,
+		additionalSettingsOrder: additionalSettingsOrder,
+		disableCompression:      disableCompression,
+		logger:                  logger,
 	}
 	if maxResponseHeaderBytes <= 0 {
 		c.maxResponseHeaderBytes = defaultMaxResponseHeaderBytes
@@ -136,7 +140,7 @@ func (c *ClientConn) setupConn() error {
 	b := make([]byte, 0, 64)
 	b = quicvarint.Append(b, streamTypeControlStream)
 	// send the SETTINGS frame
-	b = (&settingsFrame{Datagram: c.enableDatagrams, Other: c.additionalSettings}).Append(b)
+	b = (&settingsFrame{Datagram: c.enableDatagrams, Other: c.additionalSettings, Order: c.additionalSettingsOrder}).Append(b)
 	_, err = str.Write(b)
 	return err
 }

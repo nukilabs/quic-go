@@ -137,7 +137,7 @@ func TestConnControlStreamFailures(t *testing.T) {
 	t.Run("frame error", func(t *testing.T) {
 		testConnControlStreamFailures(t,
 			// 1337 is invalid value for the Extended CONNECT setting
-			(&settingsFrame{Other: map[uint64]uint64{settingExtendedConnect: 1337}}).Append(nil),
+			(&settingsFrame{Other: map[uint64]uint64{SettingExtendedConnect: 1337}}).Append(nil),
 			nil,
 			ErrCodeFrameError,
 		)
@@ -158,7 +158,7 @@ func TestConnGoAwayFailures(t *testing.T) {
 	t.Run("invalid frame", func(t *testing.T) {
 		b := (&settingsFrame{}).Append(nil)
 		// 1337 is invalid value for the Extended CONNECT setting
-		b = (&settingsFrame{Other: map[uint64]uint64{settingExtendedConnect: 1337}}).Append(b)
+		b = (&settingsFrame{Other: map[uint64]uint64{SettingExtendedConnect: 1337}}).Append(b)
 		testConnControlStreamFailures(t, b, nil, ErrCodeFrameError)
 	})
 	t.Run("not a GOAWAY", func(t *testing.T) {
