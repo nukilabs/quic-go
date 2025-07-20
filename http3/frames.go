@@ -201,13 +201,9 @@ func (f *settingsFrame) Append(b []byte) []byte {
 			if err != nil {
 				n = big.NewInt(1)
 			}
-			n1 = n.Uint64()
+			n1 = 0x1f*n.Uint64() + 0x21
 			if val == 0 {
-				n, err = rand.Int(rand.Reader, big.NewInt(1<<30))
-				if err != nil {
-					n = big.NewInt(1)
-				}
-				n2 = n.Uint64() % (1 << 30)
+				n2 = n1 % (1 << 30)
 			} else {
 				n2 = val
 			}
@@ -263,13 +259,9 @@ func (f *settingsFrame) AppendInOrder(b []byte) []byte {
 				if err != nil {
 					n = big.NewInt(1)
 				}
-				n1 = n.Uint64()
+				n1 = 0x1f*n.Uint64() + 0x21
 				if val == 0 {
-					n, err = rand.Int(rand.Reader, big.NewInt(1<<30))
-					if err != nil {
-						n = big.NewInt(1)
-					}
-					n2 = n.Uint64() % (1 << 30)
+					n2 = n1 % (1 << 30)
 				} else {
 					n2 = val
 				}

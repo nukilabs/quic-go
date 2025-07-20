@@ -47,7 +47,7 @@ func testRequestWriterGzip(t *testing.T, gzip bool) {
 	req.AddCookie(&http.Cookie{Name: "foo", Value: "bar"})
 	req.AddCookie(&http.Cookie{Name: "baz", Value: "lorem ipsum"})
 
-	rw := newRequestWriter()
+	rw := newRequestWriter(nil)
 	buf := &bytes.Buffer{}
 	require.NoError(t, rw.WriteRequestHeader(buf, req, gzip))
 	headerFields := decodeRequest(t, buf)
@@ -67,7 +67,7 @@ func testRequestWriterGzip(t *testing.T, gzip bool) {
 func TestRequestWriterInvalidHostHeader(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "https://quic-go.net/index.html?foo=bar", nil)
 	req.Host = "foo@bar" // @ is invalid
-	rw := newRequestWriter()
+	rw := newRequestWriter(nil)
 	require.EqualError(t,
 		rw.WriteRequestHeader(&bytes.Buffer{}, req, false),
 		"http3: invalid Host header",
@@ -78,7 +78,7 @@ func TestRequestWriterConnect(t *testing.T) {
 	// httptest.NewRequest does not properly support the CONNECT method
 	req, err := http.NewRequest(http.MethodConnect, "https://quic-go.net/", nil)
 	require.NoError(t, err)
-	rw := newRequestWriter()
+	rw := newRequestWriter(nil)
 	buf := &bytes.Buffer{}
 	require.NoError(t, rw.WriteRequestHeader(buf, req, false))
 	headerFields := decodeRequest(t, buf)
@@ -94,7 +94,7 @@ func TestRequestWriterExtendedConnect(t *testing.T) {
 	req, err := http.NewRequest(http.MethodConnect, "https://quic-go.net/", nil)
 	require.NoError(t, err)
 	req.Proto = "webtransport"
-	rw := newRequestWriter()
+	rw := newRequestWriter(nil)
 	buf := &bytes.Buffer{}
 	require.NoError(t, rw.WriteRequestHeader(buf, req, false))
 	headerFields := decodeRequest(t, buf)

@@ -235,7 +235,7 @@ func encodeRequest(t *testing.T, req *http.Request) []byte {
 	t.Helper()
 
 	var buf bytes.Buffer
-	rw := newRequestWriter()
+	rw := newRequestWriter(nil)
 	require.NoError(t, rw.WriteRequestHeader(&buf, req, false))
 	if req.Body != nil {
 		body, err := io.ReadAll(req.Body)

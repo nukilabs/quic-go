@@ -23,17 +23,19 @@ import (
 const bodyCopyBufferSize = 8 * 1024
 
 type requestWriter struct {
-	mutex     sync.Mutex
-	encoder   *qpack.Encoder
-	headerBuf *bytes.Buffer
+	mutex             sync.Mutex
+	encoder           *qpack.Encoder
+	headerBuf         *bytes.Buffer
+	pseudoHeaderOrder []string
 }
 
-func newRequestWriter() *requestWriter {
+func newRequestWriter(pseudoHeaderOrder []string) *requestWriter {
 	headerBuf := &bytes.Buffer{}
 	encoder := qpack.NewEncoder(headerBuf)
 	return &requestWriter{
-		encoder:   encoder,
-		headerBuf: headerBuf,
+		encoder:           encoder,
+		headerBuf:         headerBuf,
+		pseudoHeaderOrder: pseudoHeaderOrder,
 	}
 }
 
@@ -127,64 +129,91 @@ func (w *requestWriter) encodeHeaders(req *http.Request, addGzipHeader bool, tra
 		}
 	}
 
+	// Add content-length if we know it, or if it's a method that must have it.
+	if shouldSendReqContentLength(req.Method, contentLength) {
+		req.Header.Set("Content-Length", strconv.FormatInt(contentLength, 10))
+	}
+
+	// Add accept-encoding if we're adding a gzip header.
+	if addGzipHeader {
+		req.Header.Set("Accept-Encoding", "gzip")
+	}
+
+	// Sort the headers.
+	kvs, sorter := req.Header.SortedKeyValues(make(map[string]bool))
+	defer http.HeaderSorterPool.Put(sorter)
+
 	enumerateHeaders := func(f func(name, value string)) {
 		// 8.1.2.3 Request Pseudo-Header Fields
 		// The :path pseudo-header field includes the path and query parts of the
 		// target URI (the path-absolute production and optionally a '?' character
 		// followed by the query production (see Sections 3.3 and 3.4 of
 		// [RFC3986]).
-		f(":authority", host)
-		f(":method", req.Method)
-		if req.Method != http.MethodConnect || isExtendedConnect {
-			f(":path", path)
-			f(":scheme", req.URL.Scheme)
-		}
-		if isExtendedConnect {
-			f(":protocol", req.Proto)
+		if w.pseudoHeaderOrder != nil {
+			for _, name := range w.pseudoHeaderOrder {
+				switch name {
+				case ":authority":
+					f(":authority", host)
+				case ":method":
+					f(":method", req.Method)
+				case ":path":
+					if req.Method != http.MethodConnect || isExtendedConnect {
+						f(":path", path)
+					}
+				case ":scheme":
+					if req.Method != http.MethodConnect || isExtendedConnect {
+						f(":scheme", req.URL.Scheme)
+					}
+				}
+			}
+		} else {
+			f(":authority", host)
+			f(":method", req.Method)
+			if req.Method != http.MethodConnect || isExtendedConnect {
+				f(":path", path)
+				f(":scheme", req.URL.Scheme)
+			}
+			if isExtendedConnect {
+				f(":protocol", req.Proto)
+			}
 		}
 		if trailers != "" {
 			f("trailer", trailers)
 		}
 
 		var didUA bool
-		for k, vv := range req.Header {
-			if strings.EqualFold(k, "host") || strings.EqualFold(k, "content-length") {
+		for _, kv := range kvs {
+			if strings.EqualFold(kv.Key, "host") || strings.EqualFold(kv.Key, "content-length") {
 				// Host is :authority, already sent.
 				// Content-Length is automatic, set below.
 				continue
-			} else if strings.EqualFold(k, "connection") || strings.EqualFold(k, "proxy-connection") ||
-				strings.EqualFold(k, "transfer-encoding") || strings.EqualFold(k, "upgrade") ||
-				strings.EqualFold(k, "keep-alive") {
+			} else if strings.EqualFold(kv.Key, "connection") || strings.EqualFold(kv.Key, "proxy-connection") ||
+				strings.EqualFold(kv.Key, "transfer-encoding") || strings.EqualFold(kv.Key, "upgrade") ||
+				strings.EqualFold(kv.Key, "keep-alive") {
 				// Per 8.1.2.2 Connection-Specific Header
 				// Fields, don't send connection-specific
 				// fields. We have already checked if any
 				// are error-worthy so just ignore the rest.
 				continue
-			} else if strings.EqualFold(k, "user-agent") {
+			} else if strings.EqualFold(kv.Key, "user-agent") {
 				// Match Go's http1 behavior: at most one
 				// User-Agent. If set to nil or empty string,
 				// then omit it. Otherwise if not mentioned,
 				// include the default (below).
 				didUA = true
-				if len(vv) < 1 {
+				if len(kv.Values) < 1 {
 					continue
 				}
-				vv = vv[:1]
-				if vv[0] == "" {
+				kv.Values = kv.Values[:1]
+				if kv.Values[0] == "" {
 					continue
 				}
 
 			}
 
-			for _, v := range vv {
-				f(k, v)
+			for _, v := range kv.Values {
+				f(kv.Key, v)
 			}
-		}
-		if shouldSendReqContentLength(req.Method, contentLength) {
-			f("content-length", strconv.FormatInt(contentLength, 10))
-		}
-		if addGzipHeader {
-			f("accept-encoding", "gzip")
 		}
 		if !didUA {
 			f("user-agent", defaultUserAgent)

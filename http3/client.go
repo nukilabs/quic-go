@@ -82,6 +82,7 @@ func newClientConn(
 	enableDatagrams bool,
 	additionalSettings map[uint64]uint64,
 	additionalSettingsOrder []uint64,
+	pseudoHeaderOrder []string,
 	streamHijacker func(FrameType, quic.ConnectionTracingID, *quic.Stream, error) (hijacked bool, err error),
 	uniStreamHijacker func(StreamType, quic.ConnectionTracingID, *quic.ReceiveStream, error) (hijacked bool),
 	maxResponseHeaderBytes int64,
@@ -101,7 +102,7 @@ func newClientConn(
 		c.maxResponseHeaderBytes = uint64(maxResponseHeaderBytes)
 	}
 	c.decoder = qpack.NewDecoder(func(hf qpack.HeaderField) {})
-	c.requestWriter = newRequestWriter()
+	c.requestWriter = newRequestWriter(pseudoHeaderOrder)
 	c.conn = newConnection(
 		conn.Context(),
 		conn,
