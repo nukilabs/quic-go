@@ -13,9 +13,6 @@ import (
 	"sync"
 
 	"github.com/nukilabs/http"
-
-	_ "github.com/nukilabs/http/pprof"
-
 	"github.com/nukilabs/quic-go"
 	"github.com/nukilabs/quic-go/http3"
 	"github.com/nukilabs/quic-go/internal/testdata"
