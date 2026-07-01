@@ -57,6 +57,9 @@ type ClientConn struct {
 	// It is invalid to specify any settings defined by RFC 9114 (HTTP/3) and RFC 9297 (HTTP Datagrams).
 	additionalSettings map[uint64]uint64
 
+	// additionalSettingsOrder specifies the order in which the additional settings are sent.
+	additionalSettingsOrder []uint64
+
 	// maxResponseHeaderBytes specifies a limit on how many response bytes are
 	// allowed in the server's response header.
 	maxResponseHeaderBytes int
@@ -84,6 +87,8 @@ func newClientConn(
 	conn *quic.Conn,
 	enableDatagrams bool,
 	additionalSettings map[uint64]uint64,
+	additionalSettingsOrder []uint64,
+	pseudoHeaderOrder []string,
 	maxResponseHeaderBytes int,
 	disableCompression bool,
 	logger *slog.Logger,
@@ -93,21 +98,22 @@ func newClientConn(
 		qlogger = qlogTrace.AddProducer()
 	}
 	c := &ClientConn{
-		conn:               conn,
-		additionalSettings: additionalSettings,
-		disableCompression: disableCompression,
-		maxStreamID:        invalidStreamID,
-		lastStreamID:       invalidStreamID,
-		logger:             logger,
-		qlogger:            qlogger,
-		decoder:            qpack.NewDecoder(),
+		conn:                    conn,
+		additionalSettings:      additionalSettings,
+		additionalSettingsOrder: additionalSettingsOrder,
+		disableCompression:      disableCompression,
+		maxStreamID:             invalidStreamID,
+		lastStreamID:            invalidStreamID,
+		logger:                  logger,
+		qlogger:                 qlogger,
+		decoder:                 qpack.NewDecoder(),
 	}
 	if maxResponseHeaderBytes <= 0 {
 		c.maxResponseHeaderBytes = defaultMaxResponseHeaderBytes
 	} else {
 		c.maxResponseHeaderBytes = maxResponseHeaderBytes
 	}
-	c.requestWriter = newRequestWriter()
+	c.requestWriter = newRequestWriter(pseudoHeaderOrder)
 	c.rawConn = newRawConn(
 		conn,
 		enableDatagrams,
@@ -121,6 +127,7 @@ func newClientConn(
 		_, err := c.rawConn.openControlStream(&settingsFrame{
 			Datagram:            enableDatagrams,
 			Other:               additionalSettings,
+			Order:               additionalSettingsOrder,
 			MaxFieldSectionSize: int64(c.maxResponseHeaderBytes),
 		})
 		if err != nil {

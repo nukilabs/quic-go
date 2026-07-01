@@ -179,7 +179,7 @@ func TestRequestStream(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	qstr := NewMockDatagramStream(mockCtrl)
 	qstr.EXPECT().StreamID().Return(quic.StreamID(42)).AnyTimes()
-	requestWriter := newRequestWriter()
+	requestWriter := newRequestWriter(nil)
 	clientConn, _ := newConnPair(t)
 	str := newRequestStream(
 		newStream(

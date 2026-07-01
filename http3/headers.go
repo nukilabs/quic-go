@@ -63,6 +63,10 @@ func parseHeaders(decodeFn qpack.DecodeFunc, isRequest bool, sizeLimit int, head
 			}
 			return header{}, &qpackError{err}
 		}
+		// HeaderOrderKey is an internal ordering hint, not a real header field.
+		if h.Name == http.HeaderOrderKey {
+			continue
+		}
 		if headerFields != nil {
 			*headerFields = append(*headerFields, h)
 		}

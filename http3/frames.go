@@ -2,10 +2,12 @@ package http3
 
 import (
 	"bytes"
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"io"
 	"maps"
+	"math/big"
 
 	"github.com/nukilabs/quic-go"
 	"github.com/nukilabs/quic-go/http3/qlog"
@@ -166,12 +168,37 @@ const (
 	settingDatagram = 0x33
 )
 
+// Exported setting identifiers, used by callers that want full control over the
+// SETTINGS frame (contents and order) for fingerprinting purposes.
+const (
+	// QPACK maximum table capacity, RFC 9204
+	SettingQpackMaxTableCapacity = 0x1
+	// Maximum field section size, RFC 9114
+	SettingMaxFieldSectionSize = 0x6
+	// QPACK blocked streams, RFC 9204
+	SettingQpackBlockedStreams = 0x7
+	// Extended CONNECT, RFC 9220
+	SettingExtendedConnect = 0x8
+	// HTTP Datagrams, RFC 9297
+	SettingH3Datagram = 0x33
+	// Enable Metadata, draft-beky-httpbis-metadata-02
+	SettingEnableMetadata = 0x4d44
+	// GREASE identifier, draft-edm-protocol-greasing-05
+	SettingGrease = 0x1f*1 + 0x21
+)
+
+type Setting struct {
+	ID  uint64
+	Val uint64
+}
+
 type settingsFrame struct {
 	MaxFieldSectionSize int64 // SETTINGS_MAX_FIELD_SECTION_SIZE, -1 if not set
 
 	Datagram        bool              // HTTP Datagrams, RFC 9297
 	ExtendedConnect bool              // Extended CONNECT, RFC 9220
 	Other           map[uint64]uint64 // all settings that we don't explicitly recognize
+	Order           []uint64          // order in which the settings in Other are sent; if nil, map order is used
 }
 
 func pointer[T any](v T) *T {
@@ -260,19 +287,53 @@ func parseSettingsFrame(r *countingByteReader, l uint64, streamID quic.StreamID,
 	return frame, nil
 }
 
+// greaseValues returns the (id, value) pair to send for a GREASE setting.
+// The id is randomized per RFC-style 0x1f*N+0x21; the value defaults to a
+// derived pseudo-random value unless the caller specified a non-zero one.
+func greaseValues(val uint64) (uint64, uint64) {
+	n, err := rand.Int(rand.Reader, big.NewInt(1<<30))
+	if err != nil {
+		n = big.NewInt(1)
+	}
+	id := 0x1f*n.Uint64() + 0x21
+	if val == 0 {
+		return id, id % (1 << 30)
+	}
+	return id, val
+}
+
 func (f *settingsFrame) Append(b []byte) []byte {
+	// When an explicit order is requested, emit exactly the settings listed in
+	// Order (used for fingerprinting); MaxFieldSectionSize is not auto-added.
+	if f.Order != nil {
+		return f.appendInOrder(b)
+	}
+
 	b = quicvarint.Append(b, 0x4)
 	var l int
+	var datagramAdded, extendedConnectAdded bool
+	var greaseID, greaseVal uint64
 	if f.MaxFieldSectionSize >= 0 {
 		l += quicvarint.Len(settingMaxFieldSectionSize) + quicvarint.Len(uint64(f.MaxFieldSectionSize))
 	}
 	for id, val := range f.Other {
-		l += quicvarint.Len(id) + quicvarint.Len(val)
+		if id == SettingGrease {
+			greaseID, greaseVal = greaseValues(val)
+			l += quicvarint.Len(greaseID) + quicvarint.Len(greaseVal)
+		} else {
+			l += quicvarint.Len(id) + quicvarint.Len(val)
+		}
+		if id == SettingH3Datagram {
+			datagramAdded = true
+		}
+		if id == SettingExtendedConnect {
+			extendedConnectAdded = true
+		}
 	}
-	if f.Datagram {
+	if f.Datagram && !datagramAdded {
 		l += quicvarint.Len(settingDatagram) + quicvarint.Len(1)
 	}
-	if f.ExtendedConnect {
+	if f.ExtendedConnect && !extendedConnectAdded {
 		l += quicvarint.Len(settingExtendedConnect) + quicvarint.Len(1)
 	}
 	b = quicvarint.Append(b, uint64(l))
@@ -280,17 +341,80 @@ func (f *settingsFrame) Append(b []byte) []byte {
 		b = quicvarint.Append(b, settingMaxFieldSectionSize)
 		b = quicvarint.Append(b, uint64(f.MaxFieldSectionSize))
 	}
-	if f.Datagram {
+	for id, val := range f.Other {
+		if id == SettingGrease {
+			b = quicvarint.Append(b, greaseID)
+			b = quicvarint.Append(b, greaseVal)
+		} else {
+			b = quicvarint.Append(b, id)
+			b = quicvarint.Append(b, val)
+		}
+	}
+	if f.Datagram && !datagramAdded {
 		b = quicvarint.Append(b, settingDatagram)
 		b = quicvarint.Append(b, 1)
 	}
-	if f.ExtendedConnect {
+	if f.ExtendedConnect && !extendedConnectAdded {
 		b = quicvarint.Append(b, settingExtendedConnect)
 		b = quicvarint.Append(b, 1)
 	}
-	for id, val := range f.Other {
-		b = quicvarint.Append(b, id)
-		b = quicvarint.Append(b, val)
+	return b
+}
+
+// appendInOrder emits the settings listed in f.Order, in that exact order,
+// followed by Datagram/ExtendedConnect if enabled but not already listed.
+// It is used to reproduce a specific SETTINGS frame layout for fingerprinting.
+func (f *settingsFrame) appendInOrder(b []byte) []byte {
+	b = quicvarint.Append(b, 0x4)
+	var l int
+	var datagramAdded, extendedConnectAdded bool
+	greaseIDs := make(map[int]uint64)
+	greaseVals := make(map[int]uint64)
+	for i, id := range f.Order {
+		val, exists := f.Other[id]
+		if !exists {
+			continue
+		}
+		if id == SettingGrease {
+			greaseIDs[i], greaseVals[i] = greaseValues(val)
+			l += quicvarint.Len(greaseIDs[i]) + quicvarint.Len(greaseVals[i])
+		} else {
+			l += quicvarint.Len(id) + quicvarint.Len(val)
+		}
+		if id == SettingH3Datagram {
+			datagramAdded = true
+		}
+		if id == SettingExtendedConnect {
+			extendedConnectAdded = true
+		}
+	}
+	if f.Datagram && !datagramAdded {
+		l += quicvarint.Len(SettingH3Datagram) + quicvarint.Len(1)
+	}
+	if f.ExtendedConnect && !extendedConnectAdded {
+		l += quicvarint.Len(SettingExtendedConnect) + quicvarint.Len(1)
+	}
+	b = quicvarint.Append(b, uint64(l))
+	for i, id := range f.Order {
+		val, exists := f.Other[id]
+		if !exists {
+			continue
+		}
+		if id == SettingGrease {
+			b = quicvarint.Append(b, greaseIDs[i])
+			b = quicvarint.Append(b, greaseVals[i])
+		} else {
+			b = quicvarint.Append(b, id)
+			b = quicvarint.Append(b, val)
+		}
+	}
+	if f.Datagram && !datagramAdded {
+		b = quicvarint.Append(b, SettingH3Datagram)
+		b = quicvarint.Append(b, 1)
+	}
+	if f.ExtendedConnect && !extendedConnectAdded {
+		b = quicvarint.Append(b, SettingExtendedConnect)
+		b = quicvarint.Append(b, 1)
 	}
 	return b
 }
