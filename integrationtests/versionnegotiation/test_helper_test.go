@@ -2,14 +2,14 @@ package versionnegotiation
 
 import (
 	"context"
-	"crypto/tls"
 	"crypto/x509"
 	"flag"
+	tls "github.com/nukilabs/utls"
 	"os"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/integrationtests/tools"
-	"github.com/quic-go/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/integrationtests/tools"
+	"github.com/nukilabs/quic-go/qlogwriter"
 )
 
 var (

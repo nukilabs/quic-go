@@ -3,19 +3,19 @@ package http3
 import (
 	"bytes"
 	"context"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptest"
+	"github.com/nukilabs/http/httptrace"
 	"io"
 	"math"
-	"net/http"
-	"net/http/httptest"
-	"net/http/httptrace"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
-	"github.com/quic-go/quic-go/testutils/events"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/testutils/events"
 
 	"github.com/quic-go/qpack"
 

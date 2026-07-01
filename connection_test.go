@@ -4,29 +4,29 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
-	"crypto/tls"
 	"errors"
 	"fmt"
+	tls "github.com/nukilabs/utls"
 	"net"
 	"net/netip"
 	"strconv"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go/internal/ackhandler"
-	"github.com/quic-go/quic-go/internal/flowcontrol"
-	"github.com/quic-go/quic-go/internal/handshake"
-	"github.com/quic-go/quic-go/internal/mocks"
-	mockackhandler "github.com/quic-go/quic-go/internal/mocks/ackhandler"
-	"github.com/quic-go/quic-go/internal/monotime"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qerr"
-	"github.com/quic-go/quic-go/internal/synctest"
-	"github.com/quic-go/quic-go/internal/utils"
-	"github.com/quic-go/quic-go/internal/wire"
-	"github.com/quic-go/quic-go/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
-	"github.com/quic-go/quic-go/testutils/events"
+	"github.com/nukilabs/quic-go/internal/ackhandler"
+	"github.com/nukilabs/quic-go/internal/flowcontrol"
+	"github.com/nukilabs/quic-go/internal/handshake"
+	"github.com/nukilabs/quic-go/internal/mocks"
+	mockackhandler "github.com/nukilabs/quic-go/internal/mocks/ackhandler"
+	"github.com/nukilabs/quic-go/internal/monotime"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/qerr"
+	"github.com/nukilabs/quic-go/internal/synctest"
+	"github.com/nukilabs/quic-go/internal/utils"
+	"github.com/nukilabs/quic-go/internal/wire"
+	"github.com/nukilabs/quic-go/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/testutils/events"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -1901,7 +1901,7 @@ func TestConnectionPacketPacing(t *testing.T) {
 }
 
 // When the send queue blocks, we need to reset the pacing timer, otherwise the run loop might busy-loop.
-// See https://github.com/quic-go/quic-go/pull/4943 for more details.
+// See https://github.com/nukilabs/quic-go/pull/4943 for more details.
 func TestConnectionPacingAndSendQueue(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)

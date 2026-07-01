@@ -2,17 +2,17 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/nukilabs/utls"
 	"log"
 	"net"
 
-	fuzzhandshake "github.com/quic-go/quic-go/fuzzing/handshake"
-	"github.com/quic-go/quic-go/fuzzing/internal/helper"
-	"github.com/quic-go/quic-go/internal/handshake"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/testdata"
-	"github.com/quic-go/quic-go/internal/utils"
-	"github.com/quic-go/quic-go/internal/wire"
+	fuzzhandshake "github.com/nukilabs/quic-go/fuzzing/handshake"
+	"github.com/nukilabs/quic-go/fuzzing/internal/helper"
+	"github.com/nukilabs/quic-go/internal/handshake"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/testdata"
+	"github.com/nukilabs/quic-go/internal/utils"
+	"github.com/nukilabs/quic-go/internal/wire"
 )
 
 const alpn = "fuzz"

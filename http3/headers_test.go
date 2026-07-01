@@ -3,9 +3,9 @@ package http3
 import (
 	"bytes"
 	"fmt"
+	"github.com/nukilabs/http"
 	"io"
 	"math"
-	"net/http"
 	"testing"
 
 	"github.com/quic-go/qpack"
@@ -29,7 +29,7 @@ func TestRequestHeaderParsing(t *testing.T) {
 		testRequestHeaderParsing(t, "/foo")
 	})
 
-	// see https://github.com/quic-go/quic-go/pull/1898
+	// see https://github.com/nukilabs/quic-go/pull/1898
 	t.Run("path starting with //", func(t *testing.T) {
 		testRequestHeaderParsing(t, "//foo")
 	})

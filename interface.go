@@ -2,15 +2,15 @@ package quic
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
+	tls "github.com/nukilabs/utls"
 	"net"
 	"slices"
 	"time"
 
-	"github.com/quic-go/quic-go/internal/handshake"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/internal/handshake"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/qlogwriter"
 )
 
 // The StreamID is the ID of a QUIC stream.

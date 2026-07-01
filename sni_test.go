@@ -3,12 +3,12 @@ package quic
 import (
 	"context"
 	"crypto/rand"
-	"crypto/tls"
+	tls "github.com/nukilabs/utls"
 	"io"
 	mrand "math/rand/v2"
 	"testing"
 
-	"github.com/quic-go/quic-go/internal/testdata"
+	"github.com/nukilabs/quic-go/internal/testdata"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

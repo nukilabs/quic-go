@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go/internal/synctest"
-	"github.com/quic-go/quic-go/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/internal/synctest"
+	"github.com/nukilabs/quic-go/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
 	"github.com/stretchr/testify/require"
 )
 

@@ -4,22 +4,22 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptrace"
 	"io"
 	"net"
-	"net/http"
-	"net/http/httptrace"
 	"strconv"
 	"strings"
 	"sync"
 
-	"golang.org/x/net/http/httpguts"
-	"golang.org/x/net/http2/hpack"
+	"github.com/nukilabs/http/http2/hpack"
+	"github.com/nukilabs/http/httpguts"
 	"golang.org/x/net/idna"
 
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
 	"github.com/quic-go/qpack"
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
 )
 
 const bodyCopyBufferSize = 8 * 1024

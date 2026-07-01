@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/synctest"
-	"github.com/quic-go/quic-go/internal/wire"
-	"github.com/quic-go/quic-go/testutils/simnet"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/synctest"
+	"github.com/nukilabs/quic-go/internal/wire"
+	"github.com/nukilabs/quic-go/testutils/simnet"
 
 	"github.com/stretchr/testify/require"
 )

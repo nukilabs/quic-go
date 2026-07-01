@@ -1,15 +1,15 @@
 package self_test
 
 import (
+	"github.com/nukilabs/http"
 	"io"
 	"net"
-	"net/http"
 	"strconv"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
 	"github.com/stretchr/testify/require"
 )
 

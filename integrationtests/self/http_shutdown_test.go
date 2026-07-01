@@ -2,18 +2,18 @@ package self_test
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
+	"github.com/nukilabs/http"
+	tls "github.com/nukilabs/utls"
 	"io"
 	"net"
-	"net/http"
 	"net/url"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	quicproxy "github.com/quic-go/quic-go/integrationtests/tools/proxy"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	quicproxy "github.com/nukilabs/quic-go/integrationtests/tools/proxy"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

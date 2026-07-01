@@ -3,17 +3,17 @@ package http3
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"errors"
 	"fmt"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptest"
+	tls "github.com/nukilabs/utls"
 	"io"
-	"net/http"
-	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/quic-go"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

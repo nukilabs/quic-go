@@ -2,22 +2,22 @@ package http3
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"fmt"
+	"github.com/nukilabs/http"
+	tls "github.com/nukilabs/utls"
 	"io"
 	"log/slog"
 	"net"
-	"net/http"
 	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
 )
 
 // NextProtoH3 is the ALPN protocol negotiated during the TLS handshake, for QUIC v1 and v2.

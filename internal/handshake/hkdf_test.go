@@ -4,7 +4,7 @@ import (
 	"crypto"
 	"crypto/cipher"
 	"crypto/rand"
-	"crypto/tls"
+	tls "github.com/nukilabs/utls"
 	"testing"
 	"unsafe"
 

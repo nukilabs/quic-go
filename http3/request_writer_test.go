@@ -2,15 +2,15 @@ package http3
 
 import (
 	"bytes"
+	"github.com/nukilabs/http"
+	"github.com/nukilabs/http/httptest"
 	"io"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
-	"github.com/quic-go/quic-go/testutils/events"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/testutils/events"
 
 	"github.com/stretchr/testify/require"
 )

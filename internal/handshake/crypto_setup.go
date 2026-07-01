@@ -2,21 +2,21 @@ package handshake
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"fmt"
+	tls "github.com/nukilabs/utls"
 	"net"
 	"strings"
 	"sync/atomic"
 	"time"
 
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qerr"
-	"github.com/quic-go/quic-go/internal/utils"
-	"github.com/quic-go/quic-go/internal/wire"
-	"github.com/quic-go/quic-go/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
-	"github.com/quic-go/quic-go/quicvarint"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/qerr"
+	"github.com/nukilabs/quic-go/internal/utils"
+	"github.com/nukilabs/quic-go/internal/wire"
+	"github.com/nukilabs/quic-go/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/quicvarint"
 )
 
 type quicVersionContextKey struct{}

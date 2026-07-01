@@ -4,11 +4,11 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"crypto/tls"
 	"fmt"
+	tls "github.com/nukilabs/utls"
 	"testing"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/protocol"
 
 	"github.com/stretchr/testify/require"
 )
