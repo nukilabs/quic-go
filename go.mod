@@ -4,9 +4,9 @@ go 1.27
 
 require (
 	github.com/nukilabs/http v1.3.1
+	github.com/nukilabs/qpack v0.7.0
 	github.com/nukilabs/utls v1.3.3
 	github.com/quic-go/go-ossfuzz-seeds v0.1.0
-	github.com/quic-go/qpack v0.6.0
 	github.com/stretchr/testify v1.12.1
 	go.uber.org/mock v0.5.2
 	golang.org/x/crypto v0.55.0

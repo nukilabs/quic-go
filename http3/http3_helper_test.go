@@ -24,7 +24,7 @@ import (
 	"github.com/nukilabs/quic-go/http3/qlog"
 	"github.com/nukilabs/quic-go/qlogwriter"
 	"github.com/nukilabs/quic-go/quicvarint"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 
 	"github.com/stretchr/testify/require"
 )

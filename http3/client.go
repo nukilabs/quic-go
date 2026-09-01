@@ -15,7 +15,8 @@ import (
 	"github.com/nukilabs/quic-go"
 	"github.com/nukilabs/quic-go/http3/qlog"
 	"github.com/nukilabs/quic-go/qlogwriter"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/quic-go/quicvarint"
+	"github.com/nukilabs/qpack"
 )
 
 const (
@@ -106,7 +107,6 @@ func newClientConn(
 		maxStreamID:             invalidStreamID,
 		logger:                  logger,
 		qlogger:                 qlogger,
-		decoder:                 qpack.NewDecoder(),
 	}
 	c.goAwayCtx, c.goAwayCancel = context.WithCancel(context.Background())
 	if maxResponseHeaderBytes <= 0 {
@@ -123,6 +123,21 @@ func newClientConn(
 		qlogger,
 		c.logger,
 	)
+
+	// If we advertise a non-zero SETTINGS_QPACK_MAX_TABLE_CAPACITY, the server
+	// is allowed to encode response headers against the QPACK dynamic table.
+	// Enable dynamic-table decoding, route the incoming encoder stream into it,
+	// and (below) open our decoder stream to acknowledge inserts and sections.
+	qpackMaxTableCapacity := additionalSettings[SettingQpackMaxTableCapacity]
+	if qpackMaxTableCapacity > 0 {
+		c.decoder = qpack.NewDecoder(qpack.WithMaxTableCapacity(qpackMaxTableCapacity))
+		c.rawConn.qpackEncoderStrHandler = func(str *quic.ReceiveStream) {
+			c.decoder.ParseEncoderStream(str)
+		}
+	} else {
+		c.decoder = qpack.NewDecoder()
+	}
+
 	// send the SETTINGs frame, using 0-RTT data, if possible
 	go func() {
 		_, err := c.rawConn.openControlStream(&settingsFrame{
@@ -137,6 +152,15 @@ func newClientConn(
 			}
 			c.conn.CloseWithError(quic.ApplicationErrorCode(ErrCodeInternalError), "")
 			return
+		}
+		// Open our QPACK decoder stream so we can emit Section Acknowledgment,
+		// Stream Cancellation and Insert Count Increment instructions.
+		if qpackMaxTableCapacity > 0 {
+			if str, err := c.rawConn.OpenUniStream(); err == nil {
+				if _, err := str.Write(quicvarint.Append(nil, streamTypeQPACKDecoderStream)); err == nil {
+					c.decoder.SetDecoderStream(str)
+				}
+			}
 		}
 	}()
 	return c

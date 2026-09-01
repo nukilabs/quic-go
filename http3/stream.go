@@ -13,7 +13,7 @@ import (
 	"github.com/nukilabs/quic-go/http3/qlog"
 	"github.com/nukilabs/quic-go/qlogwriter"
 
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 )
 
 type datagramStream interface {
@@ -382,7 +382,7 @@ func (s *RequestStream) ReadResponse() (*http.Response, error) {
 		s.str.CancelWrite(quic.StreamErrorCode(ErrCodeRequestIncomplete))
 		return nil, fmt.Errorf("http3: failed to read response headers: %w", err)
 	}
-	decodeFn := s.decoder.Decode(headerBlock)
+	decodeFn := s.decoder.DecodeForStream(int64(s.str.StreamID()), headerBlock)
 	var hfs []qpack.HeaderField
 	if s.str.qlogger != nil {
 		hfs = make([]qpack.HeaderField, 0, 16)

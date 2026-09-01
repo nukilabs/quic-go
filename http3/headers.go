@@ -17,7 +17,7 @@ import (
 	"github.com/nukilabs/quic-go"
 	"github.com/nukilabs/quic-go/http3/qlog"
 	"github.com/nukilabs/quic-go/qlogwriter"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 )
 
 type qpackError struct{ err error }
@@ -457,7 +457,7 @@ func decodeTrailers(r io.Reader, hf *headersFrame, maxHeaderBytes int, decoder *
 	if _, err := io.ReadFull(r, b); err != nil {
 		return nil, err
 	}
-	decodeFn := decoder.Decode(b)
+	decodeFn := decoder.DecodeForStream(int64(streamID), b)
 	var fields []qpack.HeaderField
 	var headerFields *[]qpack.HeaderField
 	if qlogger != nil {

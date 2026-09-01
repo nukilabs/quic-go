@@ -13,6 +13,7 @@ set -euo pipefail
 # Pinned versions of the fork dependencies (bump as needed).
 HTTP_VER="v1.3.1"
 UTLS_VER="v1.3.3"
+QPACK_VER="v0.7.0"
 
 # Rewrite import paths in all Go sources. Order matters: the more specific
 # net/http sub-packages must be rewritten before the bare "net/http".
@@ -23,6 +24,7 @@ find . -name '*.go' -not -path './vendor/*' -print0 | xargs -0 perl -pi -e '
   s{"net/http/httptrace"}{"github.com/nukilabs/http/httptrace"}g;
   s{"net/http/httptest"}{"github.com/nukilabs/http/httptest"}g;
   s{"net/http"}{"github.com/nukilabs/http"}g;
+  s{github.com/quic-go/qpack}{github.com/nukilabs/qpack}g;
   s{github.com/quic-go/quic-go}{github.com/nukilabs/quic-go}g;
 '
 
@@ -50,6 +52,7 @@ find . -name '*.go' -not -path './vendor/*' -print0 | xargs -0 perl -pi -e '
 go mod edit -module github.com/nukilabs/quic-go
 go mod edit -require "github.com/nukilabs/http@${HTTP_VER}"
 go mod edit -require "github.com/nukilabs/utls@${UTLS_VER}"
+go mod edit -require "github.com/nukilabs/qpack@${QPACK_VER}"
 
 gofmt -w .
 go mod tidy

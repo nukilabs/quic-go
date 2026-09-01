@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	ossfuzzseeds "github.com/quic-go/go-ossfuzz-seeds"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 
 	"github.com/nukilabs/http/httpguts"
 	"github.com/stretchr/testify/require"

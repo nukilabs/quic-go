@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/nukilabs/quic-go/http3/qlog"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 
 	"github.com/nukilabs/http/httpguts"
 )

@@ -16,7 +16,7 @@ import (
 	"github.com/nukilabs/quic-go/qlogwriter"
 	"github.com/nukilabs/quic-go/quicvarint"
 	"github.com/nukilabs/quic-go/testutils/events"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"

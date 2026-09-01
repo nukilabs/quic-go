@@ -14,7 +14,7 @@ import (
 
 	"github.com/nukilabs/quic-go"
 	"github.com/nukilabs/quic-go/qlogwriter"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 )
 
 // RawServerConn is an HTTP/3 server connection.

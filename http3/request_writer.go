@@ -19,7 +19,7 @@ import (
 	"github.com/nukilabs/quic-go"
 	"github.com/nukilabs/quic-go/http3/qlog"
 	"github.com/nukilabs/quic-go/qlogwriter"
-	"github.com/quic-go/qpack"
+	"github.com/nukilabs/qpack"
 )
 
 const bodyCopyBufferSize = 8 * 1024

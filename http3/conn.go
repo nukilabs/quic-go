@@ -40,6 +40,10 @@ type rawConn struct {
 	rcvdQPACKDecoderStr atomic.Bool
 	controlStrHandler   func(*quic.ReceiveStream, *frameParser) // is called *after* the SETTINGS frame was parsed
 
+	// qpackEncoderStrHandler, if set, is called with the peer's QPACK encoder
+	// stream so its instructions can be fed into the QPACK dynamic table.
+	qpackEncoderStrHandler func(*quic.ReceiveStream)
+
 	onStreamsEmpty func()
 
 	settings         *Settings
@@ -182,8 +186,13 @@ func (c *rawConn) handleUnidirectionalStream(str *quic.ReceiveStream, isServer b
 	case streamTypeQPACKEncoderStream:
 		if isFirst := c.rcvdQPACKEncoderStr.CompareAndSwap(false, true); !isFirst {
 			c.CloseWithError(quic.ApplicationErrorCode(ErrCodeStreamCreationError), "duplicate QPACK encoder stream")
+			return
 		}
-		// Our QPACK implementation doesn't use the dynamic table yet.
+		// Feed the encoder stream into the QPACK dynamic table, if configured.
+		// Otherwise the instructions are read and discarded.
+		if c.qpackEncoderStrHandler != nil {
+			c.qpackEncoderStrHandler(str)
+		}
 		return
 	case streamTypeQPACKDecoderStream:
 		if isFirst := c.rcvdQPACKDecoderStr.CompareAndSwap(false, true); !isFirst {
