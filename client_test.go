@@ -2,7 +2,7 @@ package quic
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/nukilabs/utls"
 	"net"
 	"runtime"
 	"testing"

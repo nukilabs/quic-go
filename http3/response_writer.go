@@ -3,17 +3,17 @@ package http3
 import (
 	"bytes"
 	"fmt"
+	"github.com/nukilabs/http"
 	"log/slog"
-	"net/http"
 	"net/textproto"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/nukilabs/quic-go/http3/qlog"
 	"github.com/quic-go/qpack"
-	"github.com/quic-go/quic-go/http3/qlog"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/nukilabs/http/httpguts"
 )
 
 // HTTPStreamer allows an HTTP handler to take over an HTTP/3 stream.

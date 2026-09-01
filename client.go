@@ -2,11 +2,11 @@ package quic
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
+	tls "github.com/nukilabs/utls"
 	"net"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/protocol"
 )
 
 // make it possible to mock connection ID for initial generation in the tests

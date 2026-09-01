@@ -5,20 +5,18 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/nukilabs/http"
 	"io"
 	"log"
 	"mime/multipart"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
 
-	_ "net/http/pprof"
-
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/http3/qlog"
-	"github.com/quic-go/quic-go/internal/testdata"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/http3/qlog"
+	"github.com/nukilabs/quic-go/internal/testdata"
 )
 
 type binds []string

@@ -1,8 +1,8 @@
 package tools
 
 import (
-	"crypto/tls"
 	"crypto/x509"
+	tls "github.com/nukilabs/utls"
 	"io"
 	"net"
 	"testing"

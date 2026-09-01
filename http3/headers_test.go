@@ -4,16 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/nukilabs/http"
 	"io"
 	"math"
-	"net/http"
 	"testing"
 
 	ossfuzzseeds "github.com/quic-go/go-ossfuzz-seeds"
 	"github.com/quic-go/qpack"
 
+	"github.com/nukilabs/http/httpguts"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/net/http/httpguts"
 )
 
 func decodeFromSlice(headers []qpack.HeaderField) qpack.DecodeFunc {
@@ -35,7 +35,7 @@ func TestRequestHeaderParsing(t *testing.T) {
 		scheme string
 	}{
 		{name: "regular path", path: "/foo", scheme: "https"},
-		// see https://github.com/quic-go/quic-go/pull/1898
+		// see https://github.com/nukilabs/quic-go/pull/1898
 		{name: "path starting with //", path: "//foo", scheme: "https"},
 		{name: "upper-case scheme", path: "/foo", scheme: "HTTPS"},
 	} {

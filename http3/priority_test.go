@@ -1,7 +1,7 @@
 package http3
 
 import (
-	"net/http"
+	"github.com/nukilabs/http"
 	"strings"
 	"testing"
 

@@ -4,10 +4,10 @@ import (
 	"crypto"
 	"crypto/fips140"
 	"crypto/hkdf"
-	"crypto/tls"
 	"fmt"
+	tls "github.com/nukilabs/utls"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/protocol"
 )
 
 var (

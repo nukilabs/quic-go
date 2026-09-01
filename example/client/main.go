@@ -2,19 +2,19 @@ package main
 
 import (
 	"bytes"
-	"crypto/tls"
 	"crypto/x509"
 	"flag"
+	"github.com/nukilabs/http"
+	tls "github.com/nukilabs/utls"
 	"io"
 	"log"
-	"net/http"
 	"os"
 	"sync"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/http3/qlog"
-	"github.com/quic-go/quic-go/internal/testdata"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/http3/qlog"
+	"github.com/nukilabs/quic-go/internal/testdata"
 )
 
 func main() {

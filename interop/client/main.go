@@ -1,26 +1,26 @@
 package main
 
 import (
-	"crypto/tls"
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/nukilabs/http"
+	tls "github.com/nukilabs/utls"
 	"io"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 	"time"
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/internal/handshake"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qtls"
-	"github.com/quic-go/quic-go/interop/http09"
-	"github.com/quic-go/quic-go/interop/utils"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/internal/handshake"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/qtls"
+	"github.com/nukilabs/quic-go/interop/http09"
+	"github.com/nukilabs/quic-go/interop/utils"
 )
 
 var errUnsupported = errors.New("unsupported test case")

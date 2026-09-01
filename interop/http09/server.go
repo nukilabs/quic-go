@@ -2,14 +2,14 @@ package http09
 
 import (
 	"context"
+	"github.com/nukilabs/http"
 	"io"
 	"log"
-	"net/http"
 	"net/url"
 	"runtime"
 	"strings"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/quic-go"
 )
 
 const NextProto = "hq-interop"

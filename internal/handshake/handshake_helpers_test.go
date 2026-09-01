@@ -2,8 +2,8 @@ package handshake
 
 import (
 	"crypto/fips140"
-	"crypto/tls"
 	"encoding/hex"
+	tls "github.com/nukilabs/utls"
 	"strings"
 	"testing"
 

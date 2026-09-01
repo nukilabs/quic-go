@@ -3,7 +3,7 @@
 package handshake
 
 import (
-	"crypto/tls"
+	tls "github.com/nukilabs/utls"
 	"net"
 )
 

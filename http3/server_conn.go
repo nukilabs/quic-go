@@ -3,18 +3,18 @@ package http3
 import (
 	"context"
 	"errors"
+	"github.com/nukilabs/http"
 	"io"
 	"log/slog"
-	"net/http"
 	"runtime"
 	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
 
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/qlogwriter"
 	"github.com/quic-go/qpack"
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/qlogwriter"
 )
 
 // RawServerConn is an HTTP/3 server connection.

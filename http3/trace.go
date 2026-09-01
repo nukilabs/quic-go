@@ -1,13 +1,13 @@
 package http3
 
 import (
-	"crypto/tls"
+	"github.com/nukilabs/http/httptrace"
+	tls "github.com/nukilabs/utls"
 	"net"
-	"net/http/httptrace"
 	"net/textproto"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/nukilabs/quic-go"
 )
 
 func traceGetConn(trace *httptrace.ClientTrace, hostPort string) {

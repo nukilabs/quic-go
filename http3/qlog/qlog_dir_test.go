@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/qlog"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/qlog"
 	"github.com/stretchr/testify/require"
 )
 

@@ -3,17 +3,17 @@ package self_test
 import (
 	"context"
 	"fmt"
+	"github.com/nukilabs/http"
 	"io"
 	"net"
-	"net/http"
 	"sync"
 	"testing"
 	"testing/synctest"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/quicvarint"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/quicvarint"
 
 	"github.com/stretchr/testify/require"
 )

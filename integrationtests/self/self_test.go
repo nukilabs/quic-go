@@ -2,10 +2,10 @@ package self_test
 
 import (
 	"context"
-	"crypto/tls"
 	"crypto/x509"
 	"flag"
 	"fmt"
+	tls "github.com/nukilabs/utls"
 	"io"
 	"math/rand/v2"
 	"net"
@@ -15,14 +15,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/integrationtests/tools"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/wire"
-	"github.com/quic-go/quic-go/qlog"
-	"github.com/quic-go/quic-go/qlogwriter"
-	"github.com/quic-go/quic-go/testutils/events"
+	"github.com/nukilabs/quic-go"
+	"github.com/nukilabs/quic-go/http3"
+	"github.com/nukilabs/quic-go/integrationtests/tools"
+	"github.com/nukilabs/quic-go/internal/protocol"
+	"github.com/nukilabs/quic-go/internal/wire"
+	"github.com/nukilabs/quic-go/qlog"
+	"github.com/nukilabs/quic-go/qlogwriter"
+	"github.com/nukilabs/quic-go/testutils/events"
 
 	"github.com/stretchr/testify/require"
 )
