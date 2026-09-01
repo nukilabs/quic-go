@@ -86,6 +86,16 @@ type Transport struct {
 	// It is invalid to specify any settings defined by RFC 9114 (HTTP/3) and RFC 9297 (HTTP Datagrams).
 	AdditionalSettings map[uint64]uint64
 
+	// AdditionalSettingsOrder specifies the order in which the settings in
+	// AdditionalSettings are sent in the SETTINGS frame. Settings not listed here
+	// are not sent. If nil, the settings are sent in map iteration order.
+	AdditionalSettingsOrder []uint64
+
+	// PseudoHeaderOrder specifies the order in which the request pseudo-header
+	// fields (:authority, :method, :path, :scheme, :protocol) are sent.
+	// If nil, the default order is used.
+	PseudoHeaderOrder []string
+
 	// MaxResponseHeaderBytes specifies a limit on how many response bytes are
 	// allowed in the server's response header.
 	// Zero means to use a default limit.
@@ -133,6 +143,8 @@ func (t *Transport) init() error {
 				conn,
 				t.EnableDatagrams,
 				t.AdditionalSettings,
+				t.AdditionalSettingsOrder,
+				t.PseudoHeaderOrder,
 				t.MaxResponseHeaderBytes,
 				t.DisableCompression,
 				t.Logger,
@@ -201,6 +213,10 @@ func (t *Transport) roundTripOpt(req *http.Request, opt RoundTripOpt) (*http.Res
 	}
 	for k, vv := range req.Header {
 		if !httpguts.ValidHeaderFieldName(k) {
+			// HeaderOrderKey is an internal ordering hint, not a real header field.
+			if k == http.HeaderOrderKey {
+				continue
+			}
 			return nil, fmt.Errorf("http3: invalid http header field name %q", k)
 		}
 		for _, v := range vv {
@@ -437,6 +453,8 @@ func (t *Transport) NewClientConn(conn *quic.Conn) *ClientConn {
 		conn,
 		t.EnableDatagrams,
 		t.AdditionalSettings,
+		t.AdditionalSettingsOrder,
+		t.PseudoHeaderOrder,
 		t.MaxResponseHeaderBytes,
 		t.DisableCompression,
 		t.Logger,
@@ -463,6 +481,8 @@ func (t *Transport) NewRawClientConn(conn *quic.Conn) *RawClientConn {
 			conn,
 			t.EnableDatagrams,
 			t.AdditionalSettings,
+			t.AdditionalSettingsOrder,
+			t.PseudoHeaderOrder,
 			t.MaxResponseHeaderBytes,
 			t.DisableCompression,
 			t.Logger,
